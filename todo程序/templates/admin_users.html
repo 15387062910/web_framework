@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin - users</title>
+</head>
+<body>
+    <form action="/admin/user/update" method="post">
+        <input name="id">
+        <input name="password">
+        <button type="submit">修改密码</button>
+    </form>
+
+    <!-- jinja2语法 -->
+    <!--{% for u in users %}-->
+    <!--<div>-->
+        <!--{{ u.id }}, {{ u.username }}, {{ u.password }}-->
+    <!--</div>-->
+    <!--{% endfor %}-->
+
+    <!-- 原生写法 -->
+    <div>
+        {{ user_info }}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改 todo 的页面</title>
+</head>
+<body>
+    <h1>修改 todo</h1>
+    <!--以下一行在路径后面加参数 后台使用request.query.get获得id-->
+    <form action="/update?id={{todo_id}}" method="post">
+        <p>id: {{todo_id}}</p>
+        <!--以下注释内容会通过post提交到后台 后台使用request.form.get获得id-->
+        <!--<input name="id" value="{{todo_id}}">-->
+        <br>
+        <input type="text" name="title" value="{{todo_title}}" placeholder="请输入todo">
+        <br>
+        <button type="submit">更新</button>
+    </form>
+</body>
+</html>
