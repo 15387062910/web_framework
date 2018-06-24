@@ -1,0 +1,20 @@
+<!--__author__ = "wyb"-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jinja2_test</title>
+</head>
+<body>
+<p>test for jinja2</p>
+
+{{name}}的爱好是:
+
+<ul>
+    {% for i in hobby_list %}
+        <li>{{ i }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

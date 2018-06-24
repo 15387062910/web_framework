@@ -1,0 +1,30 @@
+<!--__author__ = "wyb"-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jinja2_test2</title>
+</head>
+<body>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>密码</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in user_list %}
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.pwd}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
