@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>todo程序ajax版本</title>
+        <style>
+            .container{
+                width: 80%;
+                margin: 0 auto;
+            }
+            .todo-cell{
+                margin: 5px 0;
+            }
+            button.todo-delete, button.todo-edit, button.todo-complete{
+                margin-right: 15px;
+            }
+            button.todo-update{
+                margin-left: 15px;
+            }
+            .todo-title{
+                display: inline-block;
+                width: 200px;
+                border: 1px solid red;
+            }
+            .todo-ct{
+                display: inline-block;
+                width: 300px;
+                border: 1px solid #5d48ff;
+            }
+            .complete{
+                color: #0e008b;
+                border: 1px solid #e1007c;
+                padding: 3px 0;
+            }
+            .complete:after{
+                content: "已完成";
+            }
+            .complete span, .complete time{
+                text-decoration: line-through;
+            }
+         </style>
+    </head>
+    <body>
+
+        <div class="container">
+            <input id='id-input-todo' placeholder="请输入todo内容">
+            <button id='id-button-add'>add</button>
+            <div class="todo-list">
+            </div>
+        </div>
+
+
+        <!-- 这是我们处理静态文件的套路 -->
+        <!-- base.js 放了公共的函数 -->
+        <!-- 按顺序引入 2 个 js 文件, 后面的 js 文件就能使用前面的文件中的函数了 -->
+        <script src='/static?file=base.js'></script>
+        <script src='/static?file=todo.js'></script>
+    </body>
+</html>
