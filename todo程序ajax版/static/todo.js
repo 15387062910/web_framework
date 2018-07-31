@@ -1,3 +1,7 @@
+
+// 生成todotodoApi的对象
+var todoApi = new TodoApi();
+
 var todoTemplate = function(todo) {
     var title = todo.title;
     var id = todo.id;
@@ -34,8 +38,8 @@ var insertEditForm = function (editButton, containerDiv) {
 };
 
 var loadTodos = function() {
-    // 调用 ajax api 来载入数据
-    apiTodoAll(function(response) {
+    // 调用 ajax todoApi 来载入数据
+    todoApi.all(function(response) {
         // 收到返回的数据, 将所有的todo插入到页面中 字符串转化成数组
         var todos = JSON.parse(response);
         // 循环添加到页面中
@@ -56,7 +60,7 @@ var bindEventTodoAdd = function() {
         var form = {
             title: title
         };
-        apiTodoAdd(form, function(response) {
+        todoApi.add(form, function(response) {
             // 收到返回的数据, 插入到页面中 字符串转化成字典
             var todo = JSON.parse(response);
             insertTodo(todo);
@@ -75,7 +79,7 @@ var bindEventTodoDelete = function () {
             // 删除todo
             var todoCell = self.parentElement;
             var todoId = todoCell.dataset.id;
-            apiTodoDelete(todoId, function (r) {
+            todoApi.delete(todoId, function (r) {
                 log('删除数据成功: ', todoId);
                 log(r);
                 todoCell.remove();
@@ -106,7 +110,7 @@ var bindEventTodoUpdate = function () {
     var todoList = e('.todo-list');
     // 注意, 第二个参数可以直接给出定义函数
     todoList.addEventListener('click', function(event){
-        log(event, event.target);
+        // log(event, event.target);
         var self = event.target;
         if(self.classList.contains('todo-update')){
             log("点击了todo-update");
@@ -120,9 +124,11 @@ var bindEventTodoUpdate = function () {
                 'id':todoId,
                 'title': title
             };
-            apiTodoUpdate(form, function (response) {
+            todoApi.update(form, function (response) {
                 // log("服务器返回的响应: ", response);
                 // 找到todo 然后替换todo中的内容
+                log(typeof response);
+                log(response);
                 var todo = JSON.parse(response);
                 var selector = '#todo-' + todo.id;
                 var todoCell = e(selector);
@@ -154,7 +160,7 @@ var bindEventTodoComplete = function () {
             if(self.classList.contains('complete')){
                 form["complete"] = "0"
             }
-            apiTodoComplete(form, function (response) {
+            todoApi.complete(form, function (response) {
                 log("服务器返回的响应: ", response);
                 var todo = JSON.parse(response);
                 log(todo);

@@ -25,89 +25,148 @@ var timeString = function (timestamp) {
 // 2018/7/30 下午9:41:29
 
 
-/*
- ajax 函数
-*/
-var ajax = function(method, path, data, reseponseCallback) {
+// 传统方法:
+// /*
+//  ajax 函数
+// */
+// var ajax = function(method, path, data, reseponseCallback) {
+//     var r = new XMLHttpRequest();
+//     // 设置请求方法和请求地址
+//     r.open(method, path, true);
+//     // 设置发送的数据的格式为 application/json
+//     r.setRequestHeader('Content-Type', 'application/json');
+//     // 注册响应函数
+//     r.onreadystatechange = function() {
+//         if(r.readyState === 4) {
+//             // r.response 存的就是服务器发过来的放在 HTTP BODY 中的数据
+//             // log("r.response: ", typeof r.response); // string
+//             reseponseCallback(r.response);
+//         }
+//     };
+//     // 把数据转换为 json 格式字符串 -> 字典转换成字符串
+//     data = JSON.stringify(data);
+//     // 发送请求
+//     r.send(data);
+// };
+//
+//
+// // TODO的前端API:
+// // 获取所有todo
+// var apiTodoAll = function(callback) {
+//     // callback -> 回调函数 将在接收到后端的响应后调用
+//     var path = '/api/todo/all';
+//     ajax('GET', path, '', callback);
+// };
+//
+//
+// // 增加一个todo
+// var apiTodoAdd = function(form, callback) {
+//     // callback -> 回调函数 将在接收到后端的响应后调用
+//     var path = '/api/todo/add';
+//     ajax('POST', path, form, callback);
+// };
+// // 测试如下:
+// // 注意 此时回调函数中没有写与操作前端页面相关的代码 所以要看到操作结果就要刷新页面 下面的测试同理
+// // apiTodoAdd({"title": "wyb666"}, function (response) {
+// //     log("todo的add测试成功!");
+// //     log("服务器返回的响应: ", response);
+// //     log("请刷新页面查看效果!");
+// // });
+//
+//
+// // 删除一个todo
+// var apiTodoDelete = function (id, callback) {
+//     // callback -> 回调函数 将在接收到后端的响应后调用
+//     var path = '/api/todo/delete?id=' + id;
+//     ajax('GET', path, '', callback);
+// };
+// // 测试如下:
+// // apiTodoDelete('1', function (response) {
+// //     log("todo的delete测试成功!");
+// //     log("服务器返回的响应: ", response);
+// //     log("请刷新页面查看效果!");
+// // });
+//
+//
+// // 更新一个todo
+// var apiTodoUpdate = function (data, callback) {
+//     // callback -> 回调函数 将在接收到后端的响应后调用
+//     var path = '/api/todo/update';
+//     ajax('POST', path, data, callback);
+// };
+// // // 测试如下:
+// // apiTodoUpdate({
+// //     "id": "1",
+// //     "title": "被修改后的内容"
+// // }, function (response) {
+// //     log("todo的update测试成功!");
+// //     log("服务器返回的响应: ", response);
+// //     log("请刷新页面查看效果!");
+// // });
+//
+//
+// // 完成一个todo
+// var apiTodoComplete = function (data, callback) {
+//     // callback -> 回调函数 将在接收到后端的响应后调用
+//     var path = '/api/todo/complete';
+//     ajax('POST', path, data, callback);
+// };
+
+
+// 封装成对象
+// todo的前端API:
+var TodoApi = function() {
+    this.baseUrl = '/api/todo'
+};
+
+TodoApi.prototype.get = function(path, callback) {
+    var url = `${this.baseUrl}` + path;
     var r = new XMLHttpRequest();
-    // 设置请求方法和请求地址
-    r.open(method, path, true);
-    // 设置发送的数据的格式为 application/json
-    r.setRequestHeader('Content-Type', 'application/json');
-    // 注册响应函数
+    r.open('GET', url, true);
     r.onreadystatechange = function() {
-        if(r.readyState === 4) {
-            // r.response 存的就是服务器发过来的放在 HTTP BODY 中的数据
-            // log("r.response: ", typeof r.response); // string
-            reseponseCallback(r.response);
+        if (r.readyState === 4) {
+            callback(r.response);
         }
     };
-    // 把数据转换为 json 格式字符串 -> 字典转换成字符串
-    data = JSON.stringify(data);
-    // 发送请求
-    r.send(data);
+    r.send();
 };
 
-
-// TODO的前端API:
-// 获取所有todo
-var apiTodoAll = function(callback) {
-    // callback -> 回调函数 将在接收到后端的响应后调用
-    var path = '/api/todo/all';
-    ajax('GET', path, '', callback);
+TodoApi.prototype.post = function(path, data, callback) {
+    var url = `${this.baseUrl}` + path;
+    var r = new XMLHttpRequest();
+    r.open( 'POST', url, true );
+    r.setRequestHeader('Content-Type', 'application/json');
+    r.onreadystatechange = function() {
+        if (r.readyState === 4) {
+            callback(r.response);
+        }
+    };
+    var d = JSON.stringify(data);
+    r.send(d)
 };
 
-
-// 增加一个todo
-var apiTodoAdd = function(form, callback) {
-    // callback -> 回调函数 将在接收到后端的响应后调用
-    var path = '/api/todo/add';
-    ajax('POST', path, form, callback);
+TodoApi.prototype.all = function(callback) {
+    var path = '/all';
+    this.get(path, callback);
 };
-// 测试如下:
-// 注意 此时回调函数中没有写与操作前端页面相关的代码 所以要看到操作结果就要刷新页面 下面的测试同理
-// apiTodoAdd({"title": "wyb666"}, function (response) {
-//     log("todo的add测试成功!");
-//     log("服务器返回的响应: ", response);
-//     log("请刷新页面查看效果!");
-// });
 
-
-// 删除一个todo
-var apiTodoDelete = function (id, callback) {
-    // callback -> 回调函数 将在接收到后端的响应后调用
-    var path = '/api/todo/delete?id=' + id;
-    ajax('GET', path, '', callback);
+TodoApi.prototype.add = function(todo, callback) {
+    var path = '/add';
+    this.post(path, todo, callback);
 };
-// 测试如下:
-// apiTodoDelete('1', function (response) {
-//     log("todo的delete测试成功!");
-//     log("服务器返回的响应: ", response);
-//     log("请刷新页面查看效果!");
-// });
 
-
-// 更新一个todo
-var apiTodoUpdate = function (data, callback) {
-    // callback -> 回调函数 将在接收到后端的响应后调用
-    var path = '/api/todo/update';
-    ajax('POST', path, data, callback);
+TodoApi.prototype.delete = function(todoId, callback) {
+    var path = '/delete/?id=' + todoId;
+    this.get(path, callback);
 };
-// // 测试如下:
-// apiTodoUpdate({
-//     "id": "1",
-//     "title": "被修改后的内容"
-// }, function (response) {
-//     log("todo的update测试成功!");
-//     log("服务器返回的响应: ", response);
-//     log("请刷新页面查看效果!");
-// });
 
+TodoApi.prototype.update = function(todo, callback) {
+    var path = '/update';
+    this.post(path, todo, callback);
+};
 
-// 完成一个todo
-var apiTodoComplete = function (data, callback) {
-    // callback -> 回调函数 将在接收到后端的响应后调用
-    var path = '/api/todo/complete';
-    ajax('POST', path, data, callback);
+TodoApi.prototype.complete = function(todo, callback) {
+    var path = '/complete';
+    this.post(path, todo, callback);
 };
 
